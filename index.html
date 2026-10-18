@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>freaky gurl 💋</title>
+    <meta name="description" content="A stylish, dark, flirty, mysterious digital gift made especially for Clair with an interactive envelope, personal typed letter, music lounge, and playful surprises." />
+    
+    <!-- OpenGraph / Social Share Cards -->
+    <meta property="og:title" content="freaky gurl 💋" />
+    <meta property="og:description" content="A secret little corner of the internet made just for Clair." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/images/cover-1.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+    <!-- Google Fonts Preconnect & Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Local Stylesheet -->
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Background Particle Canvas -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Tap / Click Heart Burst Container -->
+    <div id="heart-tap-container" aria-hidden="true"></div>
+
+    <!-- Top Navigation Bar (3-Zone Contract) -->
+    <header class="top-bar">
+      <div class="container top-bar-inner">
+        <!-- Zone 1: Brand Wordmark -->
+        <a href="#envelope" class="brand-mark" aria-label="freaky gurl home">
+          freaky gurl 💋
+        </a>
+
+        <!-- Zone 2: Navigation Links -->
+        <nav class="nav-links" aria-label="Primary Navigation">
+          <a href="#envelope" class="nav-link">the envelope</a>
+          <a href="#letter" class="nav-link">the letter</a>
+          <a href="#choices" class="nav-link">surprises</a>
+          <a href="#music" class="nav-link">music room</a>
+          <a href="#vibes" class="nav-link">vibes</a>
+        </nav>
+
+        <!-- Zone 3: Primary Actions -->
+        <div class="header-action-zone">
+          <button type="button" class="gamepad-nav-btn" id="gamepad-btn" aria-label="Play Freaky Arcade Game" title="Play Freaky Game 🎮">
+            <span class="gamepad-icon-wrap" aria-hidden="true">
+              <svg class="gamepad-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 9 18.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </span>
+            <span class="gamepad-btn-text">freaky game</span>
+            <span class="gamepad-pulse-dot" aria-hidden="true"></span>
+          </button>
+
+          <a href="#letter" class="top-action-btn" id="header-action-btn">
+            <span>open note</span>
+            <span aria-hidden="true">✉️</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Subtitle Banner -->
+    <aside class="sub-banner" role="complementary" aria-label="Announcement">
+      <span>psst…</span> someone made a little something for you.
+    </aside>
+
+    <main>
+      <!-- ====================================================================
+           SECTION 1: THE ENVELOPE ✉️
+           ==================================================================== -->
+      <section id="envelope" class="envelope-section" aria-label="The Envelope">
+        <div class="envelope-intro-text">
+          <p class="envelope-kicker">hey clair… 💋</p>
+          <h1 class="envelope-title font-serif italic">you have a little something waiting for you</h1>
+          <p class="envelope-subtitle">take a breath, tap the envelope below, and see what is waiting inside.</p>
+        </div>
+
+        <!-- 3D Centered Envelope -->
+        <div
+          class="envelope-wrapper"
+          id="envelope-wrapper"
+          role="button"
+          tabindex="0"
+          aria-label="Interactive letter envelope for Clair. Press Enter or tap to open."
+        >
+          <div class="envelope-box" id="envelope-box">
+            <!-- Back plate -->
+            <div class="envelope-back"></div>
+
+            <!-- Letter tucked inside -->
+            <div class="envelope-letter-card">
+              <div class="letter-peek-lines"></div>
+              <div class="letter-peek-lines short"></div>
+              <span class="letter-peek-kiss">💋</span>
+            </div>
+
+            <!-- Front pocket folds -->
+            <div class="envelope-pocket">
+              <div class="pocket-left"></div>
+              <div class="pocket-right"></div>
+              <div class="pocket-bottom"></div>
+            </div>
+
+            <!-- Top Flap -->
+            <div class="envelope-flap" id="envelope-flap"></div>
+
+            <!-- Heart Wax Seal -->
+            <div class="wax-seal" id="wax-seal" title="Wax seal">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="envelope-hint" id="envelope-hint-btn">
+          <span>tap the envelope to open</span>
+          <span aria-hidden="true">✨</span>
+        </button>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2: THE LETTER 💌
+           ==================================================================== -->
+      <section id="letter" class="letter-section" aria-label="Personal Letter">
+        <div class="container">
+          <div class="letter-panel">
+            <div class="letter-header">
+              <h2 class="letter-title font-serif italic">just for you, clair 💗</h2>
+              <div class="typing-controls">
+                <button type="button" class="typing-btn" id="pause-typing-btn" aria-label="Pause typing animation">
+                  Pause ⏸
+                </button>
+                <button type="button" class="typing-btn" id="skip-typing-btn" aria-label="Skip typing animation">
+                  Skip animation ⏩
+                </button>
+              </div>
+            </div>
+
+            <!-- Typed Message Area -->
+            <div class="letter-body" id="letter-body" aria-live="polite"></div>
+            <span class="typing-cursor" id="typing-cursor" aria-hidden="true"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3: INTERACTIVE CHOICES 👀
+           ==================================================================== -->
+      <section id="choices" class="choices-section" aria-label="Interactive Options">
+        <div class="container">
+          <div class="section-intro">
+            <p class="section-kicker">what next?</p>
+            <h2 class="section-heading font-serif italic">okayyy, your turn now 👀</h2>
+            <p class="section-subheading">choose whatever calls to you right now.</p>
+          </div>
+
+          <div class="choices-grid">
+            <!-- Choice A -->
+            <button type="button" class="choice-card" id="choice-message-btn">
+              <span class="choice-icon" aria-hidden="true">💌</span>
+              <span class="choice-title">Send me a message</span>
+              <span class="choice-desc">Write something back and send it over in your chat.</span>
+            </button>
+
+            <!-- Choice B -->
+            <button type="button" class="choice-card" id="choice-music-btn">
+              <span class="choice-icon" aria-hidden="true">🎧</span>
+              <span class="choice-title">Play something for us</span>
+              <span class="choice-desc">Head to the mini music room and put on a peaceful vibe.</span>
+            </button>
+
+            <!-- Choice C -->
+            <button type="button" class="choice-card" id="choice-surprise-btn">
+              <span class="choice-icon" aria-hidden="true">👀</span>
+              <span class="choice-title">One more surprise?</span>
+              <span class="choice-desc">Uncover a tiny secret compliment meant for you.</span>
+            </button>
+
+            <!-- Choice D: Freaky Arcade -->
+            <button type="button" class="choice-card choice-card-arcade" id="choice-game-btn">
+              <span class="choice-icon" aria-hidden="true">🎮</span>
+              <span class="choice-title">Play freaky game</span>
+              <span class="choice-desc">Catch kisses & glowing hearts in our flirty arcade.</span>
+            </button>
+          </div>
+
+          <!-- Surprise Box Container -->
+          <div class="surprise-box" id="surprise-box" role="region" aria-live="polite">
+            <p class="surprise-quote font-serif" id="surprise-quote">"caught you exploring this little corner hehe 💋"</p>
+            <button type="button" class="surprise-refresh-btn" id="surprise-refresh-btn">
+              <span>Another one?</span>
+              <span aria-hidden="true">✨</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4: THE MUSIC ROOM 🎶
+           ==================================================================== -->
+      <section id="music" class="music-section" aria-label="Music Room">
+        <div class="container">
+          <div class="section-intro">
+            <p class="section-kicker">audio lounge</p>
+            <h2 class="section-heading font-serif italic">the little music room 🎶</h2>
+            <p class="section-subheading">pick a song, get comfy, and stay awhile.</p>
+          </div>
+
+          <div class="music-card" id="music-card">
+            <!-- Hidden Native HTML5 Audio Element -->
+            <audio id="native-audio" preload="metadata"></audio>
+
+            <div class="music-layout">
+              <!-- Left Column: Rotating Vinyl Record & Visualizer -->
+              <div class="vinyl-deck">
+                <div class="vinyl-disc-container">
+                  <div class="vinyl-disc" id="vinyl-disc">
+                    <div class="vinyl-center-art">
+                      <img
+                        id="vinyl-art-img"
+                        src="./assets/images/cover-1.jpg"
+                        alt="Album Cover Art"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="vinyl-spindle-hole" aria-hidden="true"></div>
+                  </div>
+                </div>
+
+                <!-- Animated Equalizer Visualizer (active only while playing) -->
+                <div class="audio-visualizer" id="audio-visualizer" aria-hidden="true">
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                  <span class="vis-bar"></span>
+                </div>
+              </div>
+
+              <!-- Right Column: Player Controls & Playlist -->
+              <div class="player-details">
+                <div class="track-meta-header">
+                  <span class="track-source-indicator" id="track-source-badge">✨ Ambient Synth</span>
+                  <h3 class="current-track-title" id="current-track-title">peaceful midnight chimes ✨</h3>
+                  <p class="current-artist-name" id="current-artist-name">built-in ambient generator</p>
+                </div>
+
+                <!-- Progress & Seek Bar -->
+                <div class="progress-container">
+                  <div class="time-row">
+                    <span id="current-time">0:00</span>
+                    <span id="total-duration">Ambient Stream</span>
+                  </div>
+                  <input
+                    type="range"
+                    class="seek-slider"
+                    id="seek-slider"
+                    min="0"
+                    max="100"
+                    value="0"
+                    aria-label="Track progress seek bar"
+                  />
+                </div>
+
+                <!-- Main Playback Controls -->
+                <div class="playback-controls">
+                  <!-- Shuffle -->
+                  <button type="button" class="control-btn" id="shuffle-btn" aria-label="Toggle shuffle mode" title="Shuffle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="16 3 21 3 21 8"/>
+                      <line x1="4" y1="20" x2="21" y2="3"/>
+                      <polyline points="21 16 21 21 16 21"/>
+                      <line x1="15" y1="15" x2="21" y2="21"/>
+                      <line x1="4" y1="4" x2="9" y2="9"/>
+                    </svg>
+                  </button>
+
+                  <!-- Previous Track -->
+                  <button type="button" class="control-btn" id="prev-track-btn" aria-label="Previous track" title="Previous">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="19,20 9,12 19,4"/>
+                      <line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+
+                  <!-- Play / Pause -->
+                  <button type="button" class="play-pause-btn" id="play-pause-btn" aria-label="Play music" title="Play / Pause">
+                    <span id="play-pause-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5,3 19,12 5,21"/>
+                      </svg>
+                    </span>
+                  </button>
+
+                  <!-- Next Track -->
+                  <button type="button" class="control-btn" id="next-track-btn" aria-label="Next track" title="Next">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="5,4 15,12 5,20"/>
+                      <line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+
+                  <!-- Repeat Mode -->
+                  <button type="button" class="control-btn is-active" id="repeat-btn" aria-label="Toggle repeat mode" title="Repeat: All Tracks">
+                    <span id="repeat-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="17 1 21 5 17 9"/>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                        <polyline points="7 23 3 19 7 15"/>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+
+                <!-- Volume Row -->
+                <div class="volume-strip">
+                  <button type="button" class="control-btn" id="mute-toggle-btn" aria-label="Mute audio" style="min-width:36px; min-height:36px;">
+                    <span id="mute-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                      </svg>
+                    </span>
+                  </button>
+                  <input
+                    type="range"
+                    class="vol-slider"
+                    id="volume-slider"
+                    min="0"
+                    max="100"
+                    value="80"
+                    aria-label="Volume level slider"
+                  />
+                </div>
+
+                <!-- Playlist Section -->
+                <div class="playlist-panel">
+                  <div class="playlist-header">
+                    <span class="playlist-label">Select Track</span>
+                    <button type="button" class="audio-guide-toggle" id="audio-guide-toggle">How to add MP3s?</button>
+                  </div>
+
+                  <!-- Guide Collapsible -->
+                  <div class="audio-guide-content" id="audio-guide-content">
+                    <p>💡 <strong>Local Music Tip:</strong> Place your favorite MP3 audio files inside the <code>assets/music/</code> folder named <code>track-1.mp3</code>, <code>track-2.mp3</code>, etc., or customize the file paths in <code>script.js</code>. The built-in ambient stream works anytime with zero setup!</p>
+                  </div>
+
+                  <div class="playlist-list" id="playlist-items" role="list">
+                    <!-- Populated dynamically by script.js -->
+                  </div>
+                </div>
+
+                <!-- Missing Audio Error Banner -->
+                <div class="audio-status-banner" id="audio-status-banner" role="alert">
+                  <span aria-hidden="true">⚠️</span>
+                  <span id="audio-error-text">Track file not found. Place the audio file in assets/music/ to play!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5: PICK YOUR VIBE 💋
+           ==================================================================== -->
+      <section id="vibes" class="vibe-section" aria-label="Pick Your Vibe">
+        <div class="container">
+          <div class="section-intro">
+            <p class="section-kicker">mood switcher</p>
+            <h2 class="section-heading font-serif italic">pick your vibe 💋</h2>
+            <p class="section-subheading">tap a mood to shift the lighting and tone.</p>
+          </div>
+
+          <div class="vibe-cards-grid">
+            <button type="button" class="vibe-card is-selected" data-vibe="soft">
+              <span class="vibe-card-title">soft mode 🌸</span>
+              <span class="vibe-card-sub">gentle warmth & soft pink glow</span>
+            </button>
+
+            <button type="button" class="vibe-card" data-vibe="chaotic">
+              <span class="vibe-card-title">chaotic mode 😭</span>
+              <span class="vibe-card-sub">unhinged energy & electric cherry</span>
+            </button>
+
+            <button type="button" class="vibe-card" data-vibe="mysterious">
+              <span class="vibe-card-title">mysterious mode 🖤</span>
+              <span class="vibe-card-sub">midnight purple & subtle secrets</span>
+            </button>
+          </div>
+
+          <div class="vibe-response-box" id="vibe-response-box" role="status" aria-live="polite">
+            "okay, we're being cute today. soft girl hours activated 🌸"
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 6: FINAL NOTE 🌙
+           ==================================================================== -->
+      <section id="final-note" class="final-section" aria-label="Final Note">
+        <div class="container">
+          <div class="final-card">
+            <h2 class="final-heading font-serif italic">before you go…</h2>
+            <p class="final-message" id="final-message">
+i hope this little surprise made you smile, clair. 💗
+
+even if we're miles apart, i hope your days are filled with good music, kind people, and little things worth smiling about.
+
+ingat ka palagi, okay?
+
+made with care, just for you. 💋
+            </p>
+            <button type="button" class="replay-letter-btn" id="replay-letter-btn">
+              <span>read the letter again</span>
+              <span aria-hidden="true">✉️</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>freaky gurl 💋 · a little corner of the internet</p>
+      </div>
+    </footer>
+
+    <!-- ======================================================================
+         MODAL: MESSAGE COMPOSER 💌
+         ====================================================================== -->
+    <div
+      class="modal-overlay"
+      id="message-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title font-serif italic" id="modal-title">send me a message 💌</h3>
+          <button type="button" class="modal-close-btn" id="close-modal-btn" aria-label="Close message composer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <textarea
+            class="message-textarea"
+            id="message-textarea"
+            placeholder="type something for me…"
+            maxlength="500"
+            aria-label="Message text area"
+          ></textarea>
+
+          <div class="textarea-footer">
+            <span id="char-count">0 / 500</span>
+            <button type="button" class="modal-btn modal-btn-subtle" id="clear-message-btn" style="padding: 0.25rem 0.6rem; min-height: 28px; font-size: 0.75rem;">
+              Clear
+            </button>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="modal-btn modal-btn-subtle" id="cancel-modal-btn">
+              Cancel
+            </button>
+            <button type="button" class="modal-btn modal-btn-subtle" id="copy-message-btn">
+              <span>Copy Message</span>
+              <span aria-hidden="true">📋</span>
+            </button>
+            <button type="button" class="modal-btn modal-btn-primary" id="send-message-btn">
+              <span>Send</span>
+              <span aria-hidden="true">💌</span>
+            </button>
+          </div>
+
+          <!-- Status Message Feedback -->
+          <div class="modal-status-feedback" id="modal-status" role="status" aria-live="polite"></div>
+
+          <p class="modal-note" id="modal-explain-note">
+            Note: Clicking Send or Copy places your message directly on your clipboard so you can paste it into whichever app you talk to them on!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL: FREAKY ARCADE GAME 🎮💋
+         ====================================================================== -->
+    <div
+      class="modal-overlay"
+      id="game-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="game-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-card game-modal-card">
+        <div class="modal-header game-modal-header">
+          <div class="game-header-left">
+            <h3 class="modal-title font-serif italic" id="game-modal-title">freaky arcade 💋</h3>
+            <span class="game-high-score-tag" id="game-high-score-tag">Best: 0</span>
+          </div>
+          <div class="game-header-actions">
+            <button type="button" class="game-sound-btn" id="game-sound-toggle-btn" aria-label="Toggle game sound effects" title="Sound Effects">
+              <span id="game-sound-icon">🔊</span>
+            </button>
+            <button type="button" class="modal-close-btn" id="close-game-modal-btn" aria-label="Close game">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="game-container">
+          <!-- Live HUD Score / Timer / Streak -->
+          <div class="game-hud">
+            <div class="hud-item">
+              <span class="hud-label">Score</span>
+              <span class="hud-val" id="game-score">0</span>
+            </div>
+            <div class="hud-item hud-streak">
+              <span class="hud-label">Streak</span>
+              <span class="hud-val" id="game-streak">0x</span>
+            </div>
+            <div class="hud-item">
+              <span class="hud-label">Time</span>
+              <span class="hud-val" id="game-timer">30s</span>
+            </div>
+          </div>
+
+          <!-- Playfield Arena -->
+          <div class="game-arena" id="game-arena">
+            <!-- 3 Lanes Grid with Target Catch Line -->
+            <div class="game-lanes">
+              <div class="game-lane" data-lane="0"></div>
+              <div class="game-lane" data-lane="1"></div>
+              <div class="game-lane" data-lane="2"></div>
+            </div>
+            <div class="game-target-line"></div>
+
+            <!-- Start / Ready Screen Overlay -->
+            <div class="game-overlay-screen" id="game-start-screen">
+              <div class="game-splash-content">
+                <div class="game-splash-icon">🎮💋</div>
+                <h4 class="game-splash-title font-serif italic">ready, clair?</h4>
+                <p class="game-splash-desc">Catch falling kisses 💋, hearts 💖, and flirty notes 🔥 before they escape! Avoid the heartbreak 💔!</p>
+                <button type="button" class="game-start-btn" id="start-game-btn">
+                  <span>Start Game</span>
+                  <span aria-hidden="true">▶</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Game Over Screen Overlay -->
+            <div class="game-overlay-screen" id="game-over-screen" style="display: none;">
+              <div class="game-splash-content">
+                <div class="game-splash-icon" id="game-over-icon">👑</div>
+                <h4 class="game-splash-title font-serif italic" id="game-over-title">game over!</h4>
+                <p class="game-over-score-text">You scored <strong id="game-final-score">0</strong> points!</p>
+                <div class="game-rank-badge" id="game-rank-badge">Certified Heart Stealer 💋</div>
+                <p class="game-compliment-reveal" id="game-compliment-reveal">"Your reflexes are as dangerous as your smile."</p>
+                <div class="game-over-actions">
+                  <button type="button" class="game-start-btn" id="restart-game-btn">
+                    <span>Play Again</span>
+                    <span aria-hidden="true">🔄</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tactile Mobile Lane Controls -->
+          <div class="game-controls-mobile">
+            <button type="button" class="lane-trigger-btn" data-lane="0" id="lane-btn-0">
+              <span class="lane-num">1</span>
+              <span class="lane-sub">LANE A</span>
+            </button>
+            <button type="button" class="lane-trigger-btn" data-lane="1" id="lane-btn-1">
+              <span class="lane-num">2</span>
+              <span class="lane-sub">LANE B</span>
+            </button>
+            <button type="button" class="lane-trigger-btn" data-lane="2" id="lane-btn-2">
+              <span class="lane-num">3</span>
+              <span class="lane-sub">LANE C</span>
+            </button>
+          </div>
+          <div class="game-hint-text">
+            <span>Desktop: Press keys <strong>1, 2, 3</strong> (or <strong>A, S, D</strong>) or click! Mobile: Tap buttons or items directly!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
