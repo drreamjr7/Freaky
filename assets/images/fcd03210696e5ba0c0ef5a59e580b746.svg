@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 750" width="500" height="750">
+  <defs>
+    <!-- Halftone Dot Pattern Background -->
+    <pattern id="halftone" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="3.2" fill="#f472b6" fill-opacity="0.45" />
+    </pattern>
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#fdf2f8"/>
+      <stop offset="50%" stop-color="#fbcfe8"/>
+      <stop offset="100%" stop-color="#f472b6"/>
+    </radialGradient>
+    <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#180b22"/>
+      <stop offset="60%" stop-color="#0a0310"/>
+      <stop offset="100%" stop-color="#050108"/>
+    </linearGradient>
+    <linearGradient id="pinkNeon" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff70a6"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="750" fill="url(#bgGrad)"/>
+  <rect width="500" height="750" fill="url(#halftone)"/>
+
+  <!-- Comic Panel Inner Border -->
+  <rect x="12" y="12" width="476" height="726" fill="none" stroke="#be123c" stroke-width="3" stroke-opacity="0.6" rx="10"/>
+
+  <!-- Floating Background Hearts -->
+  <!-- Heart 1 Top Left -->
+  <path d="M 60,90 A 18,18 0 0,0 35,110 A 18,18 0 0,0 60,135 Q 85,110 85,110 Q 85,110 60,90 Z" fill="#ff4d8d" transform="rotate(-15 60 110) scale(1.1)"/>
+  <path d="M 430,120 A 15,15 0 0,0 410,135 A 15,15 0 0,0 430,160 Q 450,135 450,135 Q 450,135 430,120 Z" fill="#e11d48" transform="rotate(20 430 140)"/>
+  <path d="M 40,360 A 16,16 0 0,0 20,380 A 16,16 0 0,0 40,405 Q 60,380 60,380 Q 60,380 40,360 Z" fill="#ff70a6" transform="rotate(-25 40 380)"/>
+  <path d="M 460,450 A 20,20 0 0,0 430,470 A 20,20 0 0,0 460,500 Q 490,470 490,470 Q 490,470 460,450 Z" fill="#ff4d8d" transform="rotate(15 460 470)"/>
+  <path d="M 90,620 A 18,18 0 0,0 65,640 A 18,18 0 0,0 90,670 Q 115,640 115,640 Q 115,640 90,620 Z" fill="#f43f5e" transform="rotate(-10 90 640) scale(1.2)"/>
+  <path d="M 420,640 A 24,24 0 0,0 390,665 A 24,24 0 0,0 420,705 Q 455,665 455,665 Q 455,665 420,640 Z" fill="#ff2a6d" transform="rotate(12 420 670) scale(1.3)"/>
+
+  <!-- Character Torso & Shoulders -->
+  <g id="body">
+    <!-- Shoulder Silhouette -->
+    <path d="M 120,750 L 140,540 L 190,450 L 250,470 L 310,450 L 360,540 L 380,750 Z" fill="url(#suitGrad)" stroke="#000" stroke-width="4"/>
+
+    <!-- Chest Armor Pink Webbing & Accent Contours -->
+    <path d="M 170,520 Q 250,560 330,520 L 340,650 Q 250,680 160,650 Z" fill="#0d0413" stroke="#ff4d8d" stroke-width="2.5" stroke-opacity="0.8"/>
+    
+    <!-- Neon Pink Spider Emblem On Chest -->
+    <g filter="url(#glow)">
+      <!-- Central Spider Body -->
+      <ellipse cx="250" cy="590" rx="18" ry="24" fill="#ff4d8d" stroke="#ffe4e6" stroke-width="1.5"/>
+      <circle cx="250" cy="564" r="10" fill="#ff4d8d"/>
+
+      <!-- 8 Spider Legs curving outward -->
+      <path d="M 240,572 Q 185,550 160,580 Q 190,565 235,580" fill="none" stroke="#ff4d8d" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 260,572 Q 315,550 340,580 Q 310,565 265,580" fill="none" stroke="#ff4d8d" stroke-width="6" stroke-linecap="round"/>
+      
+      <path d="M 238,585 Q 170,590 145,630 Q 180,605 235,595" fill="none" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 262,585 Q 330,590 355,630 Q 320,605 265,595" fill="none" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round"/>
+
+      <path d="M 240,598 Q 180,630 165,680 Q 195,645 238,610" fill="none" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 260,598 Q 320,630 335,680 Q 305,645 262,610" fill="none" stroke="#ff4d8d" stroke-width="5" stroke-linecap="round"/>
+
+      <path d="M 242,610 Q 200,670 190,720 Q 215,675 246,620" fill="none" stroke="#ff4d8d" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M 258,610 Q 300,670 310,720 Q 285,675 254,620" fill="none" stroke="#ff4d8d" stroke-width="4.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Torso highlight stripes -->
+    <path d="M 195,490 L 175,750" stroke="#ff70a6" stroke-width="3" fill="none" stroke-opacity="0.85"/>
+    <path d="M 305,490 L 325,750" stroke="#ff70a6" stroke-width="3" fill="none" stroke-opacity="0.85"/>
+  </g>
+
+  <!-- Large Iconic Hood -->
+  <g id="hood">
+    <!-- Hood outer black layer -->
+    <path d="M 250,15 C 150,15 90,130 90,260 C 90,380 150,460 170,490 C 220,530 280,530 330,490 C 350,460 410,380 410,260 C 410,130 350,15 250,15 Z" fill="#08020b" stroke="#000" stroke-width="6"/>
+
+    <!-- Hood interior pink web lining -->
+    <path d="M 250,38 C 170,38 115,140 115,255 C 115,360 165,445 185,470 C 225,505 275,505 315,470 C 335,445 385,360 385,255 C 385,140 330,38 250,38 Z" fill="#831843" stroke="#f43f5e" stroke-width="2"/>
+
+    <!-- Web pattern inside hood -->
+    <!-- Radial web ribs -->
+    <path d="M 250,38 L 250,220" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 190,160" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 310,160" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 140,240" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 360,240" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 125,320" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 250,38 L 375,320" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+
+    <!-- Concentric web arcs -->
+    <path d="M 185,95 Q 250,120 315,95" fill="none" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 150,160 Q 250,200 350,160" fill="none" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 130,240 Q 250,290 370,240" fill="none" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 120,330 Q 250,390 380,330" fill="none" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+    <path d="M 130,410 Q 250,470 370,410" fill="none" stroke="#ff70a6" stroke-width="1.8" stroke-opacity="0.7"/>
+  </g>
+
+  <!-- Masked Face (Deep Charcoal Black) -->
+  <g id="mask">
+    <path d="M 250,150 C 185,150 170,230 170,300 C 170,395 215,445 250,455 C 285,445 330,395 330,300 C 330,230 315,150 250,150 Z" fill="#0c0410" stroke="#000" stroke-width="4"/>
+
+    <!-- Shading & Cheek contours -->
+    <path d="M 250,170 Q 210,270 210,340 Q 250,390 250,440 Q 250,390 290,340 Q 290,270 250,170 Z" fill="#14061a" opacity="0.6"/>
+
+    <!-- Large Expressive Comic Eyes with Pink Borders -->
+    <!-- Left Eye -->
+    <g filter="url(#glow)">
+      <!-- Outer Pink Eye Rim -->
+      <path d="M 235,275 C 225,230 185,200 178,245 C 172,285 205,335 235,325 C 235,305 235,285 235,275 Z" fill="#ff4d8d" stroke="#be123c" stroke-width="3"/>
+      <!-- Inner White Lens with comic halftone texture -->
+      <path d="M 232,277 C 223,238 190,210 184,248 C 178,282 206,324 232,318 Z" fill="#ffffff" stroke="#000" stroke-width="2"/>
+      <path d="M 195,235 L 225,295" stroke="#fbcfe8" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Right Eye -->
+    <g filter="url(#glow)">
+      <!-- Outer Pink Eye Rim -->
+      <path d="M 265,275 C 275,230 315,200 322,245 C 328,285 295,335 265,325 C 265,305 265,285 265,275 Z" fill="#ff4d8d" stroke="#be123c" stroke-width="3"/>
+      <!-- Inner White Lens with comic halftone texture -->
+      <path d="M 268,277 C 277,238 310,210 316,248 C 322,282 294,324 268,318 Z" fill="#ffffff" stroke="#000" stroke-width="2"/>
+      <path d="M 305,235 L 275,295" stroke="#fbcfe8" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Top Title / Comic Banner (Subtle & Stylish) -->
+  <g>
+    <rect x="130" y="24" width="240" height="36" rx="8" fill="#000" fill-opacity="0.85" stroke="#ff4d8d" stroke-width="1.5"/>
+    <text x="250" y="48" font-family="'Playfair Display', Georgia, serif" font-weight="bold" font-style="italic" font-size="20" fill="#fff" text-anchor="middle" letter-spacing="1">
+      FREAKY GURL 💋
+    </text>
+  </g>
+
+  <!-- Bottom Reward Caption -->
+  <g>
+    <rect x="75" y="685" width="350" height="42" rx="8" fill="#120417" fill-opacity="0.92" stroke="#ff4d8d" stroke-width="2"/>
+    <text x="250" y="712" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="bold" font-size="18" fill="#ff4d8d" text-anchor="middle" letter-spacing="2">
+      ★ REWARD UNLOCKED ★
+    </text>
+  </g>
+</svg>

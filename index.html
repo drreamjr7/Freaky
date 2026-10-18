@@ -533,11 +533,19 @@ made with care, just for you. 💋
         </div>
 
         <div class="game-container">
-          <!-- Live HUD Score / Timer / Streak -->
+          <!-- Live HUD Score / Goal / Lives / Streak / Timer -->
           <div class="game-hud">
             <div class="hud-item">
               <span class="hud-label">Score</span>
               <span class="hud-val" id="game-score">0</span>
+            </div>
+            <div class="hud-item hud-goal">
+              <span class="hud-label">Goal</span>
+              <span class="hud-val" id="game-goal">100</span>
+            </div>
+            <div class="hud-item hud-lives">
+              <span class="hud-label">Lives</span>
+              <span class="hud-val" id="game-lives">💖💖💖</span>
             </div>
             <div class="hud-item hud-streak">
               <span class="hud-label">Streak</span>
@@ -564,7 +572,7 @@ made with care, just for you. 💋
               <div class="game-splash-content">
                 <div class="game-splash-icon">🎮💋</div>
                 <h4 class="game-splash-title font-serif italic">ready, clair?</h4>
-                <p class="game-splash-desc">Catch falling kisses 💋, hearts 💖, and flirty notes 🔥 before they escape! Avoid the heartbreak 💔!</p>
+                <p class="game-splash-desc">Catch kisses 💋, hearts 💖, and stars ✨ to hit 100 points! Don't miss or touch heartbreak 💔!</p>
                 <button type="button" class="game-start-btn" id="start-game-btn">
                   <span>Start Game</span>
                   <span aria-hidden="true">▶</span>
@@ -572,18 +580,60 @@ made with care, just for you. 💋
               </div>
             </div>
 
-            <!-- Game Over Screen Overlay -->
-            <div class="game-overlay-screen" id="game-over-screen" style="display: none;">
+            <!-- Game Over Screen Overlay (Lost State) -->
+            <div class="game-overlay-screen game-lost-screen" id="game-over-screen" style="display: none;">
               <div class="game-splash-content">
-                <div class="game-splash-icon" id="game-over-icon">👑</div>
-                <h4 class="game-splash-title font-serif italic" id="game-over-title">game over!</h4>
-                <p class="game-over-score-text">You scored <strong id="game-final-score">0</strong> points!</p>
-                <div class="game-rank-badge" id="game-rank-badge">Certified Heart Stealer 💋</div>
-                <p class="game-compliment-reveal" id="game-compliment-reveal">"Your reflexes are as dangerous as your smile."</p>
+                <div class="game-splash-icon" id="game-over-icon">😭💔</div>
+                <h4 class="game-splash-title font-serif italic" id="game-over-title">almost had it!</h4>
+                <p class="game-over-score-text">You scored <strong id="game-final-score">0</strong> / 100 points!</p>
+                <div class="game-rank-badge" id="game-rank-badge">Try One More Time 💋</div>
+                <p class="game-compliment-reveal" id="game-compliment-reveal">"don't give up clair, you've got this! try again to win the trophy!"</p>
                 <div class="game-over-actions">
                   <button type="button" class="game-start-btn" id="restart-game-btn">
                     <span>Play Again</span>
                     <span aria-hidden="true">🔄</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game Won Screen Overlay (Victory Reward Panel) -->
+            <div class="game-overlay-screen game-won-overlay" id="game-won-screen" style="display: none;">
+              <div class="game-splash-content won-splash-content">
+                <div class="won-sparkle-burst" aria-hidden="true">
+                  <span class="won-sparkle-item sp-1">✨</span>
+                  <span class="won-sparkle-item sp-2">💖</span>
+                  <span class="won-sparkle-item sp-3">💋</span>
+                  <span class="won-sparkle-item sp-4">✨</span>
+                  <span class="won-sparkle-item sp-5">🕷️</span>
+                </div>
+                <div class="won-badge-tag">★ SECRET REWARD UNLOCKED ★</div>
+                <h3 class="won-title font-serif italic" id="won-title">uuuuu didd ittt</h3>
+                <p class="won-subtitle">unstoppable reflexes, clair! here is your personal victory reward 💋</p>
+                
+                <!-- Secret Reward Image Frame -->
+                <div class="won-reward-card">
+                  <img
+                    src="./fcd03210696e5ba0c0ef5a59e580b746.jpg"
+                    alt="Clair's Secret Spiderman Reward - Freaky Gurl"
+                    class="won-reward-img"
+                    id="won-reward-img"
+                    loading="eager"
+                  />
+                  <div class="won-reward-shimmer" aria-hidden="true"></div>
+                </div>
+
+                <p class="won-score-text">
+                  Final Score: <strong id="game-won-score">100</strong> points!
+                </p>
+
+                <div class="won-actions">
+                  <button type="button" class="game-start-btn won-replay-btn" id="won-restart-btn">
+                    <span>Play Again</span>
+                    <span aria-hidden="true">🔄</span>
+                  </button>
+                  <button type="button" class="won-keep-btn" id="won-keep-btn">
+                    <span>Keep Trophy 💖</span>
                   </button>
                 </div>
               </div>

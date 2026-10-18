@@ -225,13 +225,19 @@ const DOM = {
   gameSoundIcon: document.getElementById('game-sound-icon'),
   gameHighScoreTag: document.getElementById('game-high-score-tag'),
   gameScore: document.getElementById('game-score'),
+  gameGoal: document.getElementById('game-goal'),
+  gameLives: document.getElementById('game-lives'),
   gameStreak: document.getElementById('game-streak'),
   gameTimer: document.getElementById('game-timer'),
   gameArena: document.getElementById('game-arena'),
   gameStartScreen: document.getElementById('game-start-screen'),
   gameOverScreen: document.getElementById('game-over-screen'),
+  gameWonScreen: document.getElementById('game-won-screen'),
+  gameWonScore: document.getElementById('game-won-score'),
   startGameBtn: document.getElementById('start-game-btn'),
   restartGameBtn: document.getElementById('restart-game-btn'),
+  wonRestartBtn: document.getElementById('won-restart-btn'),
+  wonKeepBtn: document.getElementById('won-keep-btn'),
   gameFinalScore: document.getElementById('game-final-score'),
   gameRankBadge: document.getElementById('game-rank-badge'),
   gameComplimentReveal: document.getElementById('game-compliment-reveal'),
@@ -1277,13 +1283,22 @@ DOM.replayLetterBtn?.addEventListener('click', () => {
 });
 
 /* ============================================================================
-   13. ARCADE AUDIO ENGINE (Web Audio API Synthesizer)
-   Generates rich retro-modern sound effects with 0 external audio files!
+   13. ARCADE AUDIO ENGINE (Web Audio API Buffers + Synthesizer)
+   Low-latency Web Audio decoding for zero-delay triggers & retro chimes.
+   Loaded files: rizz, tf, anime, spiderman
    ============================================================================ */
 class ArcadeAudioEngine {
   constructor() {
     this.audioCtx = null;
     this.soundEnabled = true;
+    this.buffers = {};
+    this.preloading = false;
+    this.soundDefs = {
+      rizz: ['./assets/audio/rizz.mp3', './assets/audio/rizz.wav'],
+      anime: ['./assets/audio/anime.mp3', './assets/audio/anime.wav'],
+      tf: ['./assets/audio/tf.mp3', './assets/audio/tf.wav'],
+      spiderman: ['./assets/audio/spiderman.mp3', './assets/audio/spiderman.wav']
+    };
   }
 
   init() {
@@ -1294,13 +1309,83 @@ class ArcadeAudioEngine {
       }
     }
     if (this.audioCtx && this.audioCtx.state === 'suspended') {
-      this.audioCtx.resume();
+      this.audioCtx.resume().catch(() => {});
+    }
+    if (!this.preloading) {
+      this.preloadAll();
     }
   }
 
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
     return this.soundEnabled;
+  }
+
+  async preloadAll() {
+    this.preloading = true;
+    for (const key of Object.keys(this.soundDefs)) {
+      this.loadSoundBuffer(key);
+    }
+  }
+
+  async loadSoundBuffer(key) {
+    if (!this.audioCtx) return;
+    const urls = this.soundDefs[key];
+    if (!urls) return;
+
+    for (const url of urls) {
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const arrayBuf = await resp.arrayBuffer();
+        this.audioCtx.decodeAudioData(
+          arrayBuf,
+          (decoded) => {
+            this.buffers[key] = decoded;
+          },
+          (err) => {
+            console.warn(`Could not decode audio buffer for ${key}:`, err);
+          }
+        );
+        break;
+      } catch (err) {
+        // Try next fallback URL if available
+      }
+    }
+  }
+
+  playSound(name, volume = 0.95) {
+    if (!this.soundEnabled) return;
+    this.init();
+
+    // 1. Primary: Ultra low-latency Web Audio API AudioBuffer playback
+    if (this.audioCtx && this.buffers[name]) {
+      try {
+        if (this.audioCtx.state === 'suspended') {
+          this.audioCtx.resume();
+        }
+        const source = this.audioCtx.createBufferSource();
+        source.buffer = this.buffers[name];
+        const gainNode = this.audioCtx.createGain();
+        gainNode.gain.setValueAtTime(volume, this.audioCtx.currentTime);
+        source.connect(gainNode);
+        gainNode.connect(this.audioCtx.destination);
+        source.start(0);
+        return;
+      } catch (err) {
+        console.warn('Web Audio buffer error:', err);
+      }
+    }
+
+    // 2. Fallback: HTML5 Audio instance for immediate playback
+    try {
+      const fallbackUrl = this.soundDefs[name]?.[0];
+      if (fallbackUrl) {
+        const audio = new Audio(fallbackUrl);
+        audio.volume = Math.min(1, Math.max(0, volume));
+        audio.play().catch(() => {});
+      }
+    } catch (_) {}
   }
 
   playCatchSound() {
@@ -1371,58 +1456,15 @@ class ArcadeAudioEngine {
       osc.stop(now + i * 0.05 + 0.22);
     });
   }
-
-  playBombSound() {
-    if (!this.soundEnabled) return;
-    this.init();
-    if (!this.audioCtx) return;
-    const now = this.audioCtx.currentTime;
-
-    const osc = this.audioCtx.createOscillator();
-    const gain = this.audioCtx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(180, now);
-    osc.frequency.exponentialRampToValueAtTime(65, now + 0.18);
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-
-    osc.connect(gain);
-    gain.connect(this.audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.25);
-  }
-
-  playFanfare() {
-    if (!this.soundEnabled) return;
-    this.init();
-    if (!this.audioCtx) return;
-    const now = this.audioCtx.currentTime;
-    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
-
-    notes.forEach((freq, idx) => {
-      const osc = this.audioCtx.createOscillator();
-      const gain = this.audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-
-      gain.gain.setValueAtTime(0.18, now + idx * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
-
-      osc.connect(gain);
-      gain.connect(this.audioCtx.destination);
-
-      osc.start(now + idx * 0.08);
-      osc.stop(now + idx * 0.08 + 0.38);
-    });
-  }
 }
 
 /* ============================================================================
    14. FREAKY ARCADE ENGINE
-   Full 3-lane reflex game with dynamic speeds, combos, and touch/keyboard controls.
+   Full 3-lane reflex game with target goal, lives, combos, and sound triggers:
+   - start -> rizz
+   - miss / mistime -> anime
+   - lose -> tf
+   - won -> spiderman + uuuuu didd ittt victory reward panel
    ============================================================================ */
 class FreakyArcadeEngine {
   constructor(dom, audio) {
@@ -1430,6 +1472,8 @@ class FreakyArcadeEngine {
     this.audio = audio;
     this.score = 0;
     this.streak = 0;
+    this.lives = 3;
+    this.winTarget = 100;
     this.timeLeft = 30;
     this.isPlaying = false;
     this.gameLoopInterval = null;
@@ -1452,6 +1496,8 @@ class FreakyArcadeEngine {
   init() {
     this.updateHighScoreDisplay();
     this.bindEvents();
+    // Warm up audio buffers on page load
+    this.audio.init();
   }
 
   bindEvents() {
@@ -1470,9 +1516,11 @@ class FreakyArcadeEngine {
       }
     });
 
-    // Start & Restart buttons
+    // Start, Restart & Won buttons
     this.dom.startGameBtn?.addEventListener('click', () => this.startGame());
     this.dom.restartGameBtn?.addEventListener('click', () => this.startGame());
+    this.dom.wonRestartBtn?.addEventListener('click', () => this.startGame());
+    this.dom.wonKeepBtn?.addEventListener('click', () => this.closeModal());
 
     // Mobile lane triggers
     this.dom.laneBtns?.forEach((btn, laneIdx) => {
@@ -1515,6 +1563,7 @@ class FreakyArcadeEngine {
     if (!this.isPlaying) {
       if (this.dom.gameStartScreen) this.dom.gameStartScreen.style.display = 'flex';
       if (this.dom.gameOverScreen) this.dom.gameOverScreen.style.display = 'none';
+      if (this.dom.gameWonScreen) this.dom.gameWonScreen.style.display = 'none';
     }
   }
 
@@ -1532,9 +1581,16 @@ class FreakyArcadeEngine {
 
   startGame() {
     this.stopGame();
+    this.audio.init();
+
+    // Sound effect: rizz plays automatically when game starts
+    this.audio.playSound('rizz');
+
     this.isPlaying = true;
     this.score = 0;
     this.streak = 0;
+    this.lives = 3;
+    this.winTarget = 100;
     this.timeLeft = 30;
     this.activeItems = [];
 
@@ -1544,24 +1600,29 @@ class FreakyArcadeEngine {
 
     if (this.dom.gameStartScreen) this.dom.gameStartScreen.style.display = 'none';
     if (this.dom.gameOverScreen) this.dom.gameOverScreen.style.display = 'none';
+    if (this.dom.gameWonScreen) this.dom.gameWonScreen.style.display = 'none';
 
     this.updateHUD();
 
-    // Clock
+    // 30s Countdown Clock
     this.clockInterval = setInterval(() => {
       this.timeLeft--;
       if (this.dom.gameTimer) {
         this.dom.gameTimer.textContent = `${this.timeLeft}s`;
       }
       if (this.timeLeft <= 0) {
-        this.endGame();
+        if (this.score >= this.winTarget) {
+          this.winGame();
+        } else {
+          this.loseGame();
+        }
       }
     }, 1000);
 
-    // Spawner
+    // Spawner loop
     this.spawnLoop();
 
-    // Physics Loop
+    // Physics Loop (60 FPS)
     this.gameLoopInterval = setInterval(() => {
       this.updatePhysics();
     }, 1000 / 60);
@@ -1570,7 +1631,6 @@ class FreakyArcadeEngine {
   spawnLoop() {
     if (!this.isPlaying) return;
     this.spawnItem();
-    // Speed increases slightly as time runs down
     const interval = Math.max(450, 850 - (30 - this.timeLeft) * 12);
     this.spawnTimer = setTimeout(() => this.spawnLoop(), interval);
   }
@@ -1592,7 +1652,6 @@ class FreakyArcadeEngine {
     itemEl.className = `game-falling-item ${def.type === 'bomb' ? 'item-bomb' : ''} ${def.type === 'star' ? 'item-star' : ''}`;
     itemEl.textContent = def.icon;
 
-    // Arena width is 100%, 3 lanes
     const arenaRect = this.dom.gameArena.getBoundingClientRect();
     const laneWidth = (arenaRect.width || 300) / 3;
     const posX = lane * laneWidth + laneWidth / 2;
@@ -1608,7 +1667,7 @@ class FreakyArcadeEngine {
       speed: 2.2 + Math.random() * 1.4 + (30 - this.timeLeft) * 0.06
     };
 
-    // Direct click/tap on item
+    // Direct click/tap on falling item
     itemEl.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -1621,21 +1680,20 @@ class FreakyArcadeEngine {
 
   updatePhysics() {
     if (!this.dom.gameArena) return;
-    const arenaHeight = this.dom.gameArena.clientHeight || 270;
+    const arenaHeight = this.dom.gameArena.clientHeight || 295;
 
     for (let i = this.activeItems.length - 1; i >= 0; i--) {
       const item = this.activeItems[i];
       item.y += item.speed;
       item.el.style.top = `${item.y}px`;
 
-      // Missed at bottom
-      if (item.y > arenaHeight + 25) {
+      // Missed at bottom of arena
+      if (item.y > arenaHeight + 20) {
         item.el.remove();
         this.activeItems.splice(i, 1);
         if (item.def.type !== 'bomb') {
-          // Break streak if not a bomb
-          this.streak = 0;
-          this.updateHUD();
+          // Slipping item is a miss!
+          this.registerMiss('slip', item.lane);
         }
       }
     }
@@ -1651,10 +1709,10 @@ class FreakyArcadeEngine {
       setTimeout(() => lanes[laneIdx].classList.remove('lane-hit-active'), 140);
     }
 
-    const arenaHeight = this.dom.gameArena.clientHeight || 270;
-    // Catch window: between arenaHeight - 85 and arenaHeight + 15
-    const catchMin = arenaHeight - 85;
-    const catchMax = arenaHeight + 15;
+    const arenaHeight = this.dom.gameArena.clientHeight || 295;
+    // Catch window: within target line threshold
+    const catchMin = arenaHeight - 90;
+    const catchMax = arenaHeight + 20;
 
     // Find nearest item in this lane within catch window
     let targetItem = null;
@@ -1675,13 +1733,44 @@ class FreakyArcadeEngine {
 
     if (targetItem) {
       this.collectItem(targetItem, targetIdx);
+    } else {
+      // Miss: player pressed the lane button at the wrong time (empty catch)!
+      this.registerMiss('mistime', laneIdx);
+    }
+  }
+
+  registerMiss(reason, laneIdx = 1) {
+    if (!this.isPlaying) return;
+
+    // Sound effect: anime plays whenever she misses!
+    this.audio.playSound('anime');
+
+    this.streak = 0;
+    this.lives = Math.max(0, this.lives - 1);
+
+    // Flash lane red
+    const lanes = this.dom.gameArena?.querySelectorAll('.game-lane');
+    if (lanes && lanes[laneIdx]) {
+      lanes[laneIdx].classList.add('lane-hit-miss');
+      setTimeout(() => lanes[laneIdx]?.classList.remove('lane-hit-miss'), 220);
+    }
+
+    const arenaRect = this.dom.gameArena?.getBoundingClientRect() || { width: 300, height: 295 };
+    const laneWidth = (arenaRect.width || 300) / 3;
+    const posX = laneIdx * laneWidth + laneWidth / 2;
+    const popText = reason === 'mistime' ? 'MISSED! ⏱️' : reason === 'bomb' ? '-15 💔' : 'MISS! 💔';
+    this.spawnScorePop(posX, (arenaRect.height || 295) - 45, popText, true);
+
+    this.updateHUD();
+
+    if (this.lives <= 0) {
+      this.loseGame();
     }
   }
 
   collectItem(itemObj, indexInArray = -1) {
     if (!this.isPlaying) return;
 
-    // Remove from active list
     const idx = indexInArray >= 0 ? indexInArray : this.activeItems.indexOf(itemObj);
     if (idx !== -1) {
       this.activeItems.splice(idx, 1);
@@ -1693,14 +1782,12 @@ class FreakyArcadeEngine {
 
     if (itemObj.def.type === 'bomb') {
       // Hit bomb
-      this.streak = 0;
       this.score = Math.max(0, this.score + itemObj.def.score);
-      this.audio.playBombSound();
-      this.spawnScorePop(posX, posY, `${itemObj.def.score}`);
+      this.registerMiss('bomb', itemObj.lane);
     } else {
       // Successful catch
       this.streak++;
-      const multiplier = Math.min(4, 1 + Math.floor(this.streak / 4));
+      const multiplier = Math.min(3, 1 + Math.floor(this.streak / 4));
       const points = itemObj.def.score * multiplier;
       this.score += points;
 
@@ -1713,15 +1800,19 @@ class FreakyArcadeEngine {
       }
 
       this.spawnScorePop(posX, posY, `+${points}`);
-    }
+      this.updateHUD();
 
-    this.updateHUD();
+      // Win Condition: reaches target points!
+      if (this.score >= this.winTarget) {
+        this.winGame();
+      }
+    }
   }
 
-  spawnScorePop(x, y, text) {
+  spawnScorePop(x, y, text, isMiss = false) {
     if (!this.dom.gameArena) return;
     const pop = document.createElement('div');
-    pop.className = 'game-score-pop';
+    pop.className = `game-score-pop ${isMiss ? 'pop-miss' : ''}`;
     pop.textContent = text;
     pop.style.left = `${x}px`;
     pop.style.top = `${y}px`;
@@ -1731,16 +1822,38 @@ class FreakyArcadeEngine {
 
   updateHUD() {
     if (this.dom.gameScore) this.dom.gameScore.textContent = this.score;
+    if (this.dom.gameGoal) this.dom.gameGoal.textContent = this.winTarget;
+    if (this.dom.gameLives) {
+      let hearts = '';
+      for (let i = 0; i < this.lives; i++) hearts += '💖';
+      if (this.lives === 0) hearts = '💀';
+      this.dom.gameLives.textContent = hearts;
+    }
     if (this.dom.gameStreak) {
-      const mult = Math.min(4, 1 + Math.floor(this.streak / 4));
+      const mult = Math.min(3, 1 + Math.floor(this.streak / 4));
       this.dom.gameStreak.textContent = `${mult}x (${this.streak})`;
     }
     if (this.dom.gameTimer) this.dom.gameTimer.textContent = `${this.timeLeft}s`;
   }
 
-  endGame() {
+  winGame() {
     this.stopGame();
-    this.audio.playFanfare();
+
+    // Sound effect: spiderman plays automatically when won!
+    this.audio.playSound('spiderman');
+
+    // Update won screen
+    if (this.dom.gameWonScore) this.dom.gameWonScore.textContent = this.score;
+    if (this.dom.gameWonScreen) this.dom.gameWonScreen.style.display = 'flex';
+    if (this.dom.gameOverScreen) this.dom.gameOverScreen.style.display = 'none';
+
+    // Tap bursts for celebration
+    try {
+      const arenaRect = this.dom.gameArena?.getBoundingClientRect();
+      if (arenaRect) {
+        triggerTapBurst(arenaRect.left + arenaRect.width / 2, arenaRect.top + arenaRect.height / 3);
+      }
+    } catch (_) {}
 
     // Check High Score
     if (this.score > this.highScore) {
@@ -1748,25 +1861,17 @@ class FreakyArcadeEngine {
       localStorage.setItem('clair_freaky_arcade_highscore', this.highScore.toString());
       this.updateHighScoreDisplay();
     }
+  }
 
-    // Determine Rank
-    let rank = "Coy Cutie 🌸";
-    let compliment = "You're cute when you're focusing!";
-    if (this.score >= 320) {
-      rank = "Freaky Gurl Royalty 👑🔥";
-      compliment = "Unstoppable! You stole every heart on the screen 💋";
-    } else if (this.score >= 200) {
-      rank = "Certified Heart Stealer 💖";
-      compliment = "Your reflexes are as dangerous as your smile 😉";
-    } else if (this.score >= 100) {
-      rank = "Smooth Operator 💋";
-      compliment = "Okay, admit it… you're secretly a gamer girl 😭";
-    }
+  loseGame() {
+    this.stopGame();
+
+    // Sound effect: tf plays automatically when she loses
+    this.audio.playSound('tf');
 
     if (this.dom.gameFinalScore) this.dom.gameFinalScore.textContent = this.score;
-    if (this.dom.gameRankBadge) this.dom.gameRankBadge.textContent = rank;
-    if (this.dom.gameComplimentReveal) this.dom.gameComplimentReveal.textContent = `"${compliment}"`;
     if (this.dom.gameOverScreen) this.dom.gameOverScreen.style.display = 'flex';
+    if (this.dom.gameWonScreen) this.dom.gameWonScreen.style.display = 'none';
   }
 
   stopGame() {
